@@ -29,4 +29,4 @@ async def show_availability(msg: Message):
 
 @user.message(F.text == '♻️ Восстановленные')
 async def choice_sticks(msg: Message):
-    pass
+    await msg.answer('Тут какая-то хуйня')
