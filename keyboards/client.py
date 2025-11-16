@@ -1,4 +1,6 @@
-from aiogram.utils.keyboard import ReplyKeyboardBuilder
+from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
+
+# ReplyKeyboard
 
 
 def get_start_kb():
@@ -8,6 +10,19 @@ def get_start_kb():
     builder.button(text='Лента')
     builder.adjust(1, 2)
     return builder.as_markup(resize_keyboard=True)
+
+
+# InlineKeyBoard
+
+def choosing_side_stick():
+    builder = InlineKeyboardBuilder()
+    builder.button(text='Левый хват', callback_data='left_side')
+    builder.button(text='Правый хват', callback_data='right_side')
+    builder.button(text='Назад', callback_data='back')
+    builder.adjust(2, 1)
+    return builder.as_markup()
+
+
 
 
 

@@ -4,6 +4,7 @@ from aiogram.filters import CommandStart
 from keyboards import client
 
 
+
 user = Router()
 
 
@@ -28,5 +29,5 @@ async def show_availability(msg: Message):
 
 
 @user.message(F.text == '♻️ Восстановленные')
-async def choice_sticks(msg: Message):
-    await msg.answer('Тут какая-то хуйня')
+async def choos_side_stick(msg:Message):
+    await msg.answer('В наличии столько-то клюшек', reply_markup=client.choosing_side_stick())
