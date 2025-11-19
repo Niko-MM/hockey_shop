@@ -23,6 +23,26 @@ def choosing_side_stick():
     return builder.as_markup()
 
 
+def show_left_sticks():
+    builder = InlineKeyboardBuilder()
+    builder.button(text='->', callback_data='➡️_left')
+    builder.button(text='<-', callback_data='⬅️_left')
+    builder.button(text='назад', callback_data='back_choosing_stick')
+    builder.adjust(2, 1)
+    return builder.as_markup()
+
+
+def show_right_sticks():
+    builder = InlineKeyboardBuilder()
+    builder.button(text='->', callback_data='➡️_right')
+    builder.button(text='<-', callback_data='⬅️_right')
+    builder.button(text='назад', callback_data='back_choosing_stick')
+    builder.adjust(2, 1)
+    return builder.as_markup()
+
+
+
+
 
 
 

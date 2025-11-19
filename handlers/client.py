@@ -1,7 +1,8 @@
 from aiogram import Router, F
-from aiogram.types import Message
+from aiogram.types import Message, ReplyKeyboardRemove, CallbackQuery
 from aiogram.filters import CommandStart
 from keyboards import client
+
 
 
 
@@ -30,4 +31,39 @@ async def show_availability(msg: Message):
 
 @user.message(F.text == '♻️ Восстановленные')
 async def choos_side_stick(msg:Message):
-    await msg.answer('В наличии столько-то клюшек', reply_markup=client.choosing_side_stick())
+    await msg.answer('В наличии столько-то клюшек', reply_markup=ReplyKeyboardRemove())
+    await msg.answer('Выберите хват клюшки', reply_markup=client.choosing_side_stick())
+
+
+@user.callback_query(F.data == 'left_side')
+async def choosing_left_side(callback: CallbackQuery):
+    text = ('Восстановленные клюшки (левый хват)\n'
+            'В наличии 3 штуки\n\n'
+            'Выберите товар'
+    )
+    await callback.message.answer(text=text) # type: ignore
+    await callback.answer()
+
+
+@user.callback_query(F.data == 'right_side')
+async def choosing_right_side(callback: CallbackQuery):
+    text = ('Восстановленные клюшки (правый хват)\n'
+            'В наличии 5 штуки\n\n'
+            'Выберите товар'
+    )
+    if callback.message:
+        await callback.message.answer(text=text) 
+    await callback.answer()
+
+
+@user.callback_query(F.data == 'back')
+async def back_choosing_stick(callback: CallbackQuery):
+    if not callback.message:
+        await callback.answer()
+        return
+
+    await callback.message.edit_text( # type: ignore
+        text='Выберите хват клюшки',
+        reply_markup=client.choosing_side_stick()
+    )
+    await callback.answer()
