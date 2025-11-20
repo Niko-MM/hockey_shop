@@ -4,15 +4,14 @@ from aiogram.filters import CommandStart
 from keyboards import client
 
 
-
-
 user = Router()
 
 
 @user.message(CommandStart())
 async def cmd_start(msg: Message):
-    await msg.answer('Рады приветствовать вас в нашем магазине',
-                     reply_markup=client.get_start_kb())
+    await msg.answer(
+        "Рады приветствовать вас в нашем магазине", reply_markup=client.get_start_kb()
+    )
 
 
 @user.message(F.text == "📦 В наличии")
@@ -29,41 +28,44 @@ async def show_availability(msg: Message):
     await msg.answer(text)
 
 
-@user.message(F.text == '♻️ Восстановленные')
-async def choos_side_stick(msg:Message):
-    await msg.answer('В наличии столько-то клюшек', reply_markup=ReplyKeyboardRemove())
-    await msg.answer('Выберите хват клюшки', reply_markup=client.choosing_side_stick())
+@user.message(F.text == "♻️ Восстановленные")
+async def choos_side_stick(msg: Message):
+    await msg.answer("Восстановленные клюшки", reply_markup=ReplyKeyboardRemove())
+    await msg.answer("Выберите хват клюшки", reply_markup=client.choosing_side_stick())
 
 
-@user.callback_query(F.data == 'left_side')
+@user.callback_query(F.data == "left_side")
 async def choosing_left_side(callback: CallbackQuery):
-    text = ('Восстановленные клюшки (левый хват)\n'
-            'В наличии 3 штуки\n\n'
-            'Выберите товар'
-    )
-    await callback.message.answer(text=text) # type: ignore
-    await callback.answer()
-
-
-@user.callback_query(F.data == 'right_side')
-async def choosing_right_side(callback: CallbackQuery):
-    text = ('Восстановленные клюшки (правый хват)\n'
-            'В наличии 5 штуки\n\n'
-            'Выберите товар'
-    )
+    text = "Восстановленные клюшки (левый хват)\nВ наличии 3 штуки\n\nВыберите товар"
     if callback.message:
-        await callback.message.answer(text=text) 
+         await callback.message.edit_text(text=text, # type: ignore
+                                     reply_markup=client.show_left_sticks())  
     await callback.answer()
 
 
-@user.callback_query(F.data == 'back')
+@user.callback_query(F.data == "right_side")
+async def choosing_right_side(callback: CallbackQuery):
+    text = "Восстановленные клюшки (правый хват)\nВ наличии 5 штуки\n\nВыберите товар"
+    if callback.message:
+        await callback.message.edit_text( # type: ignore
+            text=text, reply_markup=client.show_right_sticks()
+        )
+    await callback.answer()
+
+
+@user.callback_query(F.data == "back_choosing_stick")
 async def back_choosing_stick(callback: CallbackQuery):
+    text = "Выберите хват клюшки"
     if not callback.message:
         await callback.answer()
         return
 
-    await callback.message.edit_text( # type: ignore
-        text='Выберите хват клюшки',
+    await callback.message.edit_text(text=text,  # type: ignore
         reply_markup=client.choosing_side_stick()
     )
     await callback.answer()
+
+
+@user.callback_query(F.data == 'back_main')
+async def back_main(callback: CallbackQuery):
+    pass
