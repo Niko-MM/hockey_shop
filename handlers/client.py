@@ -53,19 +53,19 @@ async def choosing_right_side(callback: CallbackQuery):
     await callback.answer()
 
 
-@user.callback_query(F.data == "back_choosing_stick")
+@user.callback_query(F.data == "back_main")
 async def back_choosing_stick(callback: CallbackQuery):
-    text = "Выберите хват клюшки"
-    if not callback.message:
-        await callback.answer()
-        return
-
-    await callback.message.edit_text(text=text,  # type: ignore
-        reply_markup=client.choosing_side_stick()
-    )
+    text = "Главное меню"
+    if callback.message:
+        await callback.message.edit_reply_markup() # type: ignore
+        await callback.message.answer(text=text,
+                              reply_markup=client.get_start_kb())
     await callback.answer()
 
 
-@user.callback_query(F.data == 'back_main')
-async def back_main(callback: CallbackQuery):
-    pass
+@user.callback_query(F.data == 'back_choosing_stick')
+async def back_choosing_stik(callback: CallbackQuery):
+    text = "Выберите хват клюшки"
+    if callback.message:
+        await callback.message.edit_text(text=text, # type: ignore
+                                         reply_markup=client.choosing_side_stick())
